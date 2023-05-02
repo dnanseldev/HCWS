@@ -1,0 +1,7 @@
+SELECT *
+ FROM unidade_executante ue 
+ WHERE ue.cod_unidade_executante_pai = 2
+ AND ue.cod_unidade_executante = 219;
+ -------------------------------------
+ 
+ 

@@ -1,0 +1,107 @@
+SELECT  ROWNUM,
+       -- X.NUM_ORDEM,
+       --'N' IDF_SELECIONADO,
+      -- 'N' IDF_DESAPARECER,
+       X.DTA_CRIACAO,
+       X.OS,
+       X.NUM_ORDEM_SERVICO,
+       X.ANO_ORDEM_SERVICO,
+       X.COD_CENCUSTO,
+       X.COD_SITUACAO_OS,
+       X.COD_LOCAL,
+       X.IDF_PRIORIZADO,
+       X.NUM_RAMAL,
+       X.NOM_CONTATO,
+       X.NUM_BEM,
+       X.COD_UNIDADE_EXECUTANTE,
+       X.NOM_PATRIMONIO,
+       X.NOM_LOCAL,
+       X.CENTRO_CUSTO,
+       X.USU_TRIADOR,
+       X.COD_UNIADM,
+       X.IDF_TIPO_PED_DISTRIBUICAO
+
+FROM (
+
+     SELECT DISTINCT B.IDF_TIPO_PED_DISTRIBUICAO, B.DTA_CRIACAO_OS,
+                     B.DTA_CRIACAO_OS DTA_CRIACAO,
+                     B.NUM_ORDEM, TO_CHAR(B.NUM_ORDEM_SERVICO,999999) || '/' ||B.ANO_ORDEM_SERVICO OS,
+                     B.NUM_ORDEM_SERVICO, B.ANO_ORDEM_SERVICO,
+                     B.COD_CENCUSTO, B.COD_SITUACAO_OS, UE.COD_LOCAL, B.IDF_PRIORIZADO,
+                     B.NUM_RAMAL, B.NOM_CONTATO, B.NUM_BEM, B.COD_UNIDADE_EXECUTANTE,
+                     NVL(TRIM(SUBSTR(FC_NOM_BEM_PATRIMONIAL(B.NUM_BEM) ,1,250)),   '        ***** SERVIÇO *****') NOM_PATRIMONIO,
+                     C.NOM_LOCAL, C.COD_UNIADM,
+                     D.COD_CENCUSTO || '-' || D.NOM_CENCUSTO CENTRO_CUSTO,
+                     F.NOM_USUARIO||' '||F.SBN_USUARIO USU_TRIADOR
+
+    FROM ORDEM_SERVICO B, LOCAL C, CENTRO_CUSTO D,
+         USUARIO F, INSTITUTO INST, UNIDADE_EXECUTANTE UE
+
+WHERE B.COD_UNIDADE_EXECUTANTE = 53
+  AND B.COD_UNIDADE_EXECUTANTE = UE.COD_UNIDADE_EXECUTANTE
+  AND B.COD_SITUACAO_OS IN (1, 15)
+  AND B.NUM_USER_BANCO = F.NUM_USER_BANCO
+  AND B.COD_CENCUSTO = D.COD_CENCUSTO
+  AND B.COD_LOCAL = C.COD_LOCAL
+  AND D.COD_INSTITUTO = INST.COD_INSTITUTO
+  AND INST.COD_INST_SISTEMA = 1
+ORDER BY B.DTA_CRIACAO_OS DESC ) X
+ORDER BY ROWNUM;
+
+---------------------------------------------------------------------------
+SELECT ROWNUM,
+       --X.NUM_ORDEM,
+       --'N' IDF_SELECIONADO,
+       --'N' IDF_DESAPARECER,
+       X.DTA_CRIACAO,
+       X.OS,
+       X.NUM_ORDEM_SERVICO,
+       X.ANO_ORDEM_SERVICO,
+       X.COD_CENCUSTO,
+       --X.COD_SITUACAO_OS,
+       X.DSC_SITUACAO_OS,
+       X.COD_LOCAL,
+       --X.IDF_PRIORIZADO,
+       X.NUM_RAMAL,
+       X.NOM_CONTATO,
+       --X.NUM_BEM,
+       --X.COD_UNIDADE_EXECUTANTE,
+       X.nom_unidade_executante,
+       X.num_patrimonio,
+       X.dsc_tipo_patrimonio,
+       X.NOM_PATRIMONIO,
+       X.NOM_LOCAL,
+       X.CENTRO_CUSTO,
+       X.USU_TRIADOR
+       --X.COD_UNIADM,
+       --X.IDF_TIPO_PED_DISTRIBUICAO
+FROM ( 
+ SELECT DISTINCT B.IDF_TIPO_PED_DISTRIBUICAO, B.DTA_CRIACAO_OS,TOS.DSC_SITUACAO_OS,
+                 B.DTA_CRIACAO_OS DTA_CRIACAO,
+                 B.NUM_ORDEM, TO_CHAR(B.NUM_ORDEM_SERVICO,999999) || '/' ||B.ANO_ORDEM_SERVICO OS,
+                 B.NUM_ORDEM_SERVICO, B.ANO_ORDEM_SERVICO,
+                 B.COD_CENCUSTO, COD_SITUACAO_OS, COD_LOCAL, B.IDF_PRIORIZADO,
+                 B.NUM_RAMAL, B.NOM_CONTATO, NUM_BEM, COD_UNIDADE_EXECUTANTE, ue.nom_unidade_executante,
+                 NVL(TRIM(SUBSTR(FC_NOM_BEM_PATRIMONIAL(NUM_BEM) ,1,250)),   '        ***** SERVIÇO *****') NOM_PATRIMONIO,
+                 C.NOM_LOCAL, C.COD_UNIADM,
+                 D.COD_CENCUSTO || '-' || D.NOM_CENCUSTO CENTRO_CUSTO,
+                 F.NOM_USUARIO||' '||F.SBN_USUARIO USU_TRIADOR,
+                 bp.num_patrimonio,
+                 tp.dsc_tipo_patrimonio
+                 
+   FROM ORDEM_SERVICO B
+   JOIN tipo_situacao_os tos USING(Cod_Situacao_Os)   
+   JOIN unidade_executante ue USING(COD_UNIDADE_EXECUTANTE)
+   LEFT JOIN bem_patrimonial bp USING(Num_Bem)
+   JOIN  tipo_patrimonio tp USING(cod_tipo_patrimonio) 
+   JOIN CENTRO_CUSTO D ON D.COD_CENCUSTO = B.Cod_Cencusto
+   JOIN usuario F USING(NUM_USER_BANCO)   
+   JOIN INSTITUTO INST ON INST.COD_INSTITUTO = D.COD_INSTITUTO
+   JOIN LOCAL C USING(COD_LOCAL)
+WHERE 1 = 1
+AND COD_UNIDADE_EXECUTANTE = 53
+AND COD_SITUACAO_OS IN (1, 15)
+AND INST.COD_INST_SISTEMA = 1 ) X
+ORDER BY ROWNUM;     
+      
+      

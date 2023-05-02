@@ -1,0 +1,4 @@
+SELECT *
+ FROM ordem_servico os
+ WHERE os.num_ordem_servico = 23421
+ AND os.ano_ordem_servico = 2020;

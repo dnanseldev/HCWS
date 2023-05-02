@@ -1,0 +1,59 @@
+SELECT DISTINCT BP.NUM_PATRIMONIO,
+                BP.COD_TIPO_PATRIMONIO,
+                TP.DSC_TIPO_PATRIMONIO,
+                BP.NUM_BEM,
+                
+                BP.IDF_EMPRESTIMO,
+                SUBSTR(FC_NOM_BEM_PATRIMONIAL(BP.NUM_BEM), 1, 100) NOM_PATRIMONIO,
+                
+                SUBSTR(GENERICO.FCN_RETORNA_STATUS_EMPRESTIMO(BP.NUM_BEM),
+                       1,
+                       20) STATUS_NOVO,
+                
+                DECODE(LC.IDF_UNIDADE_LOCALIZACAO,
+                       1,
+                       'CAMPUS',
+                       2,
+                       'U.EMERGENCIA',
+                       1,
+                       'CAMPUS',
+                       4,
+                       'U.EMERGENCIA') LOCALIZACAO,
+                
+                EE.DTA_DEVOLUCAO_PREVISTA EMPRESTADO,
+                EE.*
+
+  FROM BEM_PATRIMONIAL              BP,
+       CENTRO_CUSTO_BEM_PATRIMONIAL CP,
+       EMPRESTIMO_EQUIPAMENTO       EE,
+       
+       LOCALIZACAO     LC,
+       TIPO_PATRIMONIO TP,
+       
+       (SELECT BPTE.NUM_BEM, OSTE.SEQ_ORDEM_SERV_TIPO_EMPRESTIMO        
+          FROM GENERICO.BEM_PATRIMONIAL_TP_IMAGEM_EQUI BPTE        
+          JOIN GENERICO.TIPO_IMAGEM_EQUIPAMENTO TIE
+             ON TIE.SEQ_TIPO_IMAGEM_EQUIPAMENTO =  BPTE.SEQ_TIPO_IMAGEM_EQUIPAMENTO
+        
+          JOIN GENERICO.ORDEM_SERVICO_TIPO_EMPRESTIMO OSTE
+            ON OSTE.SEQ_ORDEM_SERV_TIPO_EMPRESTIMO = TIE.SEQ_CODIGO_SISTEMA_ORIGEM) EQUIPAMENTO
+
+ WHERE CP.COD_CENCUSTO = 'CACK00104'      
+   AND BP.IDF_EMPRESTIMO = 1      
+   AND EQUIPAMENTO.SEQ_ORDEM_SERV_TIPO_EMPRESTIMO = 3    
+   --AND EE.DTA_HOR_EMPRESTIMO IS NULL      
+   AND CP.DTA_FIM IS NULL      
+   AND CP.COD_LOCALIZACAO = LC.COD_LOCALIZACAO      
+   AND BP.COD_TIPO_PATRIMONIO = TP.COD_TIPO_PATRIMONIO      
+   AND BP.NUM_BEM = CP.NUM_BEM      
+   AND BP.NUM_BEM = EE.NUM_BEM(+)      
+  AND BP.NUM_BEM = EQUIPAMENTO.NUM_BEM(+)      
+   AND EE.DTA_HOR_DEVOLUCAO(+) = TO_DATE('01/01/1800', 'DD/MM/YYYY')
+
+ ORDER BY NOM_PATRIMONIO;
+ 
+ SELECT *       
+          FROM GENERICO.BEM_PATRIMONIAL_TP_IMAGEM_EQUI BPTE
+          WHERE 1 = 1
+          AND BPTE.Idf_Ativo = 1;
+         -- AND  BPTE.SEQ_TIPO_IMAGEM_EQUIPAMENTO = 15;

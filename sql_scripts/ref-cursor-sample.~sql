@@ -1,0 +1,58 @@
+DECLARE
+   --Defining a pointer to a cursor
+   TYPE os_refcur IS REF CURSOR;
+   
+   --Defining a variable of the type pointer/cursor
+   --Now c1 is a variable of a cursor type. It is opened using a SQL statement
+   c1 os_refcur;
+   
+   --Declaring a record
+   r1 ordem_servico%ROWTYPE;   
+    
+BEGIN
+   OPEN c1 FOR 
+    SELECT *
+     FROM ordem_servico os
+     WHERE os.dta_criacao_os > SYSDATE -1;     
+     
+    FETCH c1 INTO r1;
+    
+    IF c1%ISOPEN THEN
+       dbms_output.put_line('The cursor is open');
+    END IF;
+    
+    dbms_output.put_line('Row count is '||c1%ROWCOUNT);
+    
+    close c1;
+    
+    if not c1%isopen then
+      dbms_output.put_line('The Cursor is closed.');
+    end if;
+    
+END;
+-------------------------------------------------------------------
+DECLARE
+   --Defining a pointer to a cursor
+   TYPE os_refcur IS REF CURSOR;
+   
+   --Defining a variable of the type pointer/cursor
+   --Now c1 is a variable of a cursor type. It is opened using a SQL statement
+   c1 os_refcur;
+   
+   --Declaring a record
+   r1 ordem_servico%ROWTYPE;   
+    
+BEGIN
+   OPEN c1 FOR 
+    SELECT *
+     FROM ordem_servico os
+     WHERE os.dta_criacao_os > SYSDATE -1;
+     
+    LOOP
+       FETCH c1 INTO r1;
+       EXIT WHEN c1%NOTFOUND;     
+    END LOOP;
+    
+    dbms_output.put_line('Row count is '||c1%ROWCOUNT);      
+    close c1;   
+END;

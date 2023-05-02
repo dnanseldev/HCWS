@@ -1,0 +1,33 @@
+SELECT  ee.dta_hor_emprestimo,
+        length(ee.dsc_observacao) sizeof,
+       ee.dsc_observacao,
+       ee.seq_ordem_serv_tipo_emprestimo
+ FROM emprestimo_equipamento ee
+ WHERE ee.dta_hor_emprestimo > TRUNC(SYSDATE)
+ AND ee.dta_hor_emprestimo < TRUNC(SYSDATE+1)
+ ORDER BY 1 DESC;
+ 
+ 
+ SELECT /*I.COD_TIPO_LOGRADOURO,
+        I.NOM_INSTITUICAO,
+        I.DSC_ENDERECO||''||DECODE(I.NUM_ENDERECO, NULL, I.NUM_ENDERECO,', '||I.NUM_ENDERECO, 'S/N', '')||' - '||I.DSC_BAIRRO||' - '||' CEP '||I.DSC_CEP         
+        ||' - '||L.NOM_LOCALIDADE||'-'||L.SGL_UF LOGRADOURO,
+        i.ds*/
+        *
+ FROM INSTITUICAO I
+ JOIN GENERICO.LOCALIDADE L ON L.COD_LOCALIDADE = I.COD_LOCALIDADE
+ WHERE I.COD_INSTITUICAO IN (1, 30, 40, 50, 80);
+ 
+  SELECT I.NOM_INSTITUICAO,
+        TL.NOM_TIPO_LOGRADOURO||' '||I.DSC_ENDERECO||''||DECODE(I.NUM_ENDERECO, NULL, I.NUM_ENDERECO,', '||I.NUM_ENDERECO, 'S/N', '')||' - '||I.DSC_BAIRRO||' - '||' CEP '||I.DSC_CEP         
+        ||' - '||L.NOM_LOCALIDADE||'-'||L.SGL_UF||' - FONE '||I.NUM_TEL_UNIDADE LOGRADOURO
+ FROM INSTITUICAO I
+ JOIN GENERICO.LOCALIDADE L ON L.COD_LOCALIDADE = I.COD_LOCALIDADE
+ LEFT JOIN GENERICO.TIPO_LOGRADOURO TL ON TL.COD_TIPO_LOGRADOURO = I.COD_TIPO_LOGRADOURO
+ WHERE I.COD_INSTITUICAO IN (1, 30, 40, 50, 80);
+ --(:COD_INSTITUICAO);
+ 
+ SELECT *
+  FROM GENERICO.tipo_logradouro;
+ 
+ 

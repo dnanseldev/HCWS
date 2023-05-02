@@ -1,0 +1,53 @@
+/*DANIEL ANSELMO*/
+WITH CUSTO_BASE AS (
+           SELECT CMM.COD_CENCUSTO
+                 ,CMM.NUM_MES
+                 ,CMM.COD_MATERIAL
+                 ,CMM.VLR_TOTAL_CONSUMO
+                 ,AL.IDF_CLASSE              
+           FROM CONSUMO_MENSAL_MATERIAL CMM
+                JOIN MATERIAL M ON M.COD_MATERIAL = CMM.COD_MATERIAL
+                JOIN GRUPO G ON G.COD_GRUPO = M.COD_GRUPO
+                JOIN ALINEA AL ON AL.COD_ALINEA = G.COD_ALINEA
+                    AND AL.IDF_CLASSE NOT IN (4,5)
+           WHERE 1 = 1
+ AND CMM.DTA_REFERENCIA BETWEEN to_date(:DTA_INI, 'DD/MM/YYYY') AND to_date(:DTA_FIM, 'DD/MM/YYYY')) 
+ ,CUSTO_FINAL AS (
+   SELECT CB.COD_CENCUSTO          
+         ,CASE CB.NUM_MES
+          WHEN 1 THEN 'JANEIRO'
+          WHEN 2 THEN 'FEVEREIRO'
+          WHEN 3 THEN 'MARÇO'
+          WHEN 4 THEN 'ABRIL'
+          WHEN 5 THEN 'MAIO'
+          WHEN 6 THEN 'JUNHO'
+          WHEN 7 THEN 'JULHO'
+          WHEN 8 THEN 'AGOSTO'
+          WHEN 9 THEN 'SETEMBRO'
+          WHEN 10 THEN 'OUTUBRO'
+          WHEN 11 THEN 'NOVEMBRO'
+          WHEN 12 THEN 'DEZEMBRO'
+      END MES          
+           ,ROUND( SUM(DECODE(CB.IDF_CLASSE,1,VLR_TOTAL_CONSUMO,0)), 2) MATERIAL_CONSUMO
+           ,ROUND( SUM(DECODE(CB.IDF_CLASSE,2,VLR_TOTAL_CONSUMO,0)), 2) MEDICAMENTO
+           ,ROUND( SUM(DECODE(CB.IDF_CLASSE,3,VLR_TOTAL_CONSUMO,0)), 2) CONSUMO_DURAVEL
+           ,ROUND( SUM(VLR_TOTAL_CONSUMO), 2) TOTAL_CONSUMO
+      FROM CUSTO_BASE CB
+      GROUP BY CB.COD_CENCUSTO,
+               CB.NUM_MES
+       ORDER BY NUM_MES )       
+     SELECT * FROM CUSTO_FINAL;
+     
+     ------------------------------
+     --CONSUMO MATERIAL E MEDICAMENTOS POR CENTRO DE CUSTO;
+     
+     SELECT * 
+      FROM PESQUISA_SISTEMA ps
+      ORDER BY 1 DESC;
+      
+   SELECT *
+    FROM bem_patrimonial bp
+    WHERE bp.num_patrimonio = 656;
+      
+     
+     

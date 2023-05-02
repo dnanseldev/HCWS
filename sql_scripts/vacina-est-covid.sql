@@ -1,0 +1,38 @@
+select * from GENERICO.DISTRIBUICAO_LISTA t
+where 1 = 1
+AND T.SEQ_TIPO_LISTA = 41
+AND T.NOM_LISTA_DISTRIBUICAO LIKE '%COVID%';
+
+select * from GENERICO.DISTRIBUICAO_LISTA_FUNC t
+WHERE 1 = 1
+--AND t.seq_distribuicao_lista IN (1161, 1201)
+--AND T.NOM_PACIENTE LIKE '%DANIEL%ANSELMO%';
+--AND T.CPF_FUNCIONARIO = '4707762859';
+AND T.NOM_PACIENTE LIKE '%BENEDITA APARECIDA%'
+AND T.CPF_FUNCIONARIO = 04707762859
+AND t.seq_distribuicao_lista IN (1161, 1201);
+
+select * from SENIOR.R034FUN t
+WHERE t.nomfun LIKE '%BENEDITA APARECIDA%';
+
+select * from AG_HABILITACAO_VACINA t
+WHERE T.NOM_FUNCIONARIO LIKE '%BENEDITA APARECIDA BORGES DA LUZ%';
+
+select * from GENERICO.AG_HABILITACAO_VACINA t
+WHERE 1 = 1
+AND T.SEQ_HAB_CERT_DIGITAL = 99585;
+--AND t.seq_hab_cert_digital  in (39612, 58952, 99585);
+
+SELECT *
+ FROM paciente p
+ WHERE p.cod_paciente = '0041847H';
+ 
+ SELECT *
+  FROM paciente_vacinacao vr
+  WHERE vr.cod_paciente = '0041847H';
+  
+  
+ SELECT *
+  FROM distribuicao_lista dl
+  WHERE dl.nom_lista_distribuicao LIKE '%COVID%'
+  AND dl.seq_distribuicao_lista IN (1161, 1162);

@@ -1,0 +1,103 @@
+  /*Equipamentos com chapas diferentes Aprimorado*/ 
+ WITH PAT_NOVOS_DUPLICADOS AS
+  (SELECT *
+     FROM (SELECT EI.NUM_BEM
+             FROM EXPORTACAO_INVENTARIO EI
+            WHERE EI.NUM_BEM IS NOT NULL
+            GROUP BY EI.NUM_BEM
+           HAVING COUNT(*) > 1) X
+    WHERE NOT EXISTS (SELECT *
+             FROM (SELECT EI.NUM_BEM,
+                          EI.NUM_PATRIMONIO_NOVO,
+                          EI.COD_TIPO_PATRIMONIO_NOVO
+                     FROM EXPORTACAO_INVENTARIO EI
+                    WHERE EI.NUM_BEM IS NOT NULL
+                    GROUP BY EI.NUM_BEM,
+                             EI.NUM_PATRIMONIO_NOVO,
+                             EI.COD_TIPO_PATRIMONIO_NOVO
+                   HAVING COUNT(*) > 1) EX
+            WHERE EX.NUM_BEM = X.NUM_BEM)),
+            
+   --Duplicados mesmo patrimônio novo
+    DUPLICADOS AS (  
+     SELECT EI.SEQ_EXPORTACAO_INVENTARIO,
+            EI.NUM_BEM,
+            EI.NUM_PATRIMONIO,
+            EI.DSC_TIPO_PATRIMONIO,
+            EI.NUM_PATRIMONIO_NOVO,
+            EI.DSC_TIPO_PATRIMONIO_NOVO,
+            EI.NUM_PATRIMONIO || '-' || EI.DSC_TIPO_PATRIMONIO PATRIMONIO_ANTIGO,
+            EI.NUM_PATRIMONIO_NOVO || '-' || EI.DSC_TIPO_PATRIMONIO_NOVO PATRIMONIO_NOVO,
+            EI.COD_CENCUSTO,
+            EI.DTA_HOR_CADASTRO_INVENT,
+            EI.DTA_HOR_EXPORTACAO,
+            EI.DSC_LOCALIZACAO,
+            EI.NOM_USUARIO_CADASTRO,
+            'PURPLE' COR
+      FROM EXPORTACAO_INVENTARIO EI
+      WHERE EXISTS 
+     (SELECT *
+     FROM (SELECT EI.NUM_BEM,
+                  EI.NUM_PATRIMONIO_NOVO,
+                  EI.DSC_TIPO_PATRIMONIO_NOVO                
+           FROM EXPORTACAO_INVENTARIO EI
+          WHERE  EI.NUM_BEM IS NOT NULL
+          GROUP BY EI.NUM_BEM,
+                   EI.NUM_PATRIMONIO_NOVO,
+                   EI.DSC_TIPO_PATRIMONIO_NOVO
+         HAVING COUNT(*) > 1) X
+         WHERE X.NUM_BEM = EI.NUM_BEM)
+         ORDER BY EI.NUM_BEM,
+                  EI.DTA_HOR_CADASTRO_INVENT DESC)    
+ 
+ SELECT
+        X.SEQ_EXPORTACAO_INVENTARIO,
+        X.NUM_BEM,
+        X.NUM_PATRIMONIO,
+        X.DSC_TIPO_PATRIMONIO,
+        X.NUM_PATRIMONIO_NOVO,
+        X.DSC_TIPO_PATRIMONIO_NOVO,
+        X.NUM_PATRIMONIO || '-' || X.DSC_TIPO_PATRIMONIO PATRIMONIO_ANTIGO,
+        X.NUM_PATRIMONIO_NOVO || '-' || X.DSC_TIPO_PATRIMONIO_NOVO PATRIMONIO_NOVO,
+        X.COD_CENCUSTO,
+        X.DTA_HOR_CADASTRO_INVENT, 
+        X.DTA_HOR_EXPORTACAO,
+        X.DSC_LOCALIZACAO,
+        X.NOM_USUARIO_CADASTRO,
+        X.COR 
+     FROM (SELECT EI.SEQ_EXPORTACAO_INVENTARIO,
+                  EI.NUM_BEM,
+                  EI.NUM_PATRIMONIO,
+                  EI.DSC_TIPO_PATRIMONIO,
+                  EI.NUM_PATRIMONIO_NOVO,
+                  EI.DSC_TIPO_PATRIMONIO_NOVO,
+                  EI.NUM_PATRIMONIO || '-' || EI.DSC_TIPO_PATRIMONIO PATRIMONIO_ANTIGO,
+                  EI.NUM_PATRIMONIO_NOVO || '-' || EI.DSC_TIPO_PATRIMONIO_NOVO PATRIMONIO_NOVO,
+                  EI.COD_CENCUSTO,
+                  EI.DTA_HOR_CADASTRO_INVENT, 
+                  EI.DTA_HOR_EXPORTACAO,
+                  EI.DSC_LOCALIZACAO,
+                  EI.NOM_USUARIO_CADASTRO,
+                  'RED' COR
+   FROM EXPORTACAO_INVENTARIO EI
+ 
+  WHERE EXISTS (SELECT 1 FROM PAT_NOVOS_DUPLICADOS D WHERE D.NUM_BEM = EI.NUM_BEM)
+  ORDER BY EI.NUM_BEM, EI.DTA_HOR_CADASTRO_INVENT DESC) X
+  UNION ALL  
+       
+         SELECT 
+            D.SEQ_EXPORTACAO_INVENTARIO,
+            D.NUM_BEM,
+            D.NUM_PATRIMONIO,
+            D.DSC_TIPO_PATRIMONIO,
+            D.NUM_PATRIMONIO_NOVO,
+            D.DSC_TIPO_PATRIMONIO_NOVO,
+            D.NUM_PATRIMONIO || '-' || D.DSC_TIPO_PATRIMONIO PATRIMONIO_ANTIGO,
+            D.NUM_PATRIMONIO_NOVO || '-' || D.DSC_TIPO_PATRIMONIO_NOVO PATRIMONIO_NOVO,
+            D.COD_CENCUSTO,
+            D.DTA_HOR_CADASTRO_INVENT,
+            D.DTA_HOR_EXPORTACAO,
+            D.DSC_LOCALIZACAO,
+            D.NOM_USUARIO_CADASTRO,
+            D.COR
+          FROM DUPLICADOS D;

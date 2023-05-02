@@ -1,0 +1,63 @@
+--632
+
+SELECT
+      bp.*
+ FROM bem_patrimonial bp 
+ WHERE 1 = 1
+    AND bp.num_patrimonio IN (631,622,636,625,614,645,627,620,626,630,639,624,643,618,632,651,629,623,619,640 )
+ AND bp.cod_tipo_patrimonio = 59
+ FOR UPDATE;
+ 
+SELECT 
+       BP.NUM_BEM,
+       bp.num_patrimonio,
+       bp.cod_tipo_patrimonio,
+       7 SEQ_TIPO_IMAGEM_EQUIPAMENTO,
+        66827 NUM_USER_CADASTRO,
+       0 IDF_ATIVO,
+       to_date('03-08-2020 12:21:11', 'dd-mm-yyyy hh24:mi:ss') DTA_HOR_CADASTRO 
+ FROM bem_patrimonial bp
+ WHERE bp.num_bem in (220499, 220503, 220504, 220505, 220507, 220508, 220509, 220510, 220511, 220512, 220514, 220515, 220516, 220517, 220521, 220524, 220525, 220528, 220530, 220536);
+ 
+ SELECT 
+       BP.NUM_BEM,
+        7 SEQ_TIPO_IMAGEM_EQUIPAMENTO,
+        66827 NUM_USER_CADASTRO
+       0 IDF_ATIVO,
+       to_date('03-08-2020 12:21:11', 'dd-mm-yyyy hh24:mi:ss') DTA_HOR_CADASTRO 
+  FROM centro_custo_bem_patrimonial bp
+  WHERE bp.num_bem in (220499, 220503, 220504, 220505, 220507, 220508, 220509, 220510, 220511, 220512, 220514, 220515, 220516, 220517, 220521, 220524, 220525, 220528, 220530, 220536)
+  AND bp.dta_fim IS NULL;
+  
+  SELECT *
+   FROM GENERICO.ORDEM_SERVICO_TIPO_EMPRESTIMO O;
+  
+   
+   
+   
+  
+  
+  select * from GENERICO.TIPO_IMAGEM_EQUIPAMENTO t
+  FOR UPDATE;
+ 
+
+
+
+select T.NUM_BEM,
+       T.SEQ_TIPO_IMAGEM_EQUIPAMENTO,
+       T.NUM_USER_CADASTRO,
+       T.IDF_ATIVO,
+       T.DTA_HOR_CADASTRO 
+from GENERICO.BEM_PATRIMONIAL_TP_IMAGEM_EQUI t
+WHERE 1 = 1
+--AND T.SEQ_TIPO_IMAGEM_EQUIPAMENTO = 7
+AND  t.num_bem 
+ in (220499, 220503, 220504, 220505, 220507, 220508, 220509, 220510, 220511, 220512, 220514, 220515, 220516, 220517, 220521, 220524, 220525, 220528, 220530, 220536);
+ 
+SELECT *
+ FROM  bem_patrimonial bp
+ WHERE bp.num_patrimonio IN (666,647)
+ AND bp.cod_tipo_patrimonio = 59;
+ 
+
+

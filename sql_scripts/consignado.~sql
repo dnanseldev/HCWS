@@ -1,0 +1,2 @@
+SELECT *
+ FROM solicitacao_insumo sit ;

@@ -1,0 +1,1 @@
+select * from LOG_RPA_VACIVIDA_EXTERNO t

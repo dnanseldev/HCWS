@@ -1,0 +1,46 @@
+--70103318
+
+SELECT *
+ FROM material m
+ WHERE m.cod_material = '70103318';
+ 
+ 
+ SELECT  NUM_REQUISICAO
+        ,RM.IDF_TIPO_REQUISICAO
+        ,IRM.COD_MATERIAL
+        ,ANO_REQUISICAO_MATERIAL
+        ,RM.COD_CENCUSTO_SOLICITANTE
+        ,RM.COD_CENCUSTO_ATENDENTE
+        ,RM.DTA_REQUISICAO
+        ,IRM.QTD_FORNE_RECEBIDA
+        ,IRM.QTD_REQUISI_DEVOLVIDA
+     FROM REQUISICAO_MATERIAL RM
+     JOIN ITEM_REQUISICAO_MATERIAL IRM USING(NUM_REQUISICAO, ANO_REQUISICAO_MATERIAL)
+  WHERE 1 = 1 
+  --AND RM.COD_CENCUSTO_SOLICITANTE = 'CFCA00012' --'CACD02022' 
+  AND RM.COD_CENCUSTO_SOLICITANTE = 'CACD02022' --'CACD02010'
+  AND RM.DTA_REQUISICAO > TO_DATE('01/05/2021', 'DD/MM/YYYY')
+  AND IRM.COD_MATERIAL = '70103318'
+  ORDER BY RM.DTA_REQUISICAO DESC; 
+    
+ 
+ ---Transferencia de centro custo
+ 
+ SELECT *
+  FROM vacina_recepcao vr;
+  --CACD02010
+  --CACD02046
+  ---------------------------
+  SELECT *
+   FROM centro_custo cc
+   WHERE cc.cod_cencusto = 'CACD02022';
+   ----------------------------------
+   select * from ESTOQUE.ESTOQUE_MATERIAL t
+where t.cod_cencusto = 'CACD02022' --'CACD02022'
+AND t.cod_material = '70103318';
+
+
+SELECT *
+  FROM Vacina_Recepcao vr
+  ;
+ 
