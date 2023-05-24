@@ -15,6 +15,49 @@ SELECT  os.num_ordem
        ,'CIA'
  FROM ordem_servico os
  WHERE 1 = 1
+ AND os.num_ordem = 1454120;
+--------------------------------------
+DECLARE
+BEGIN
+  INSERT INTO GENERICO.HISTORICO_ORDEM_SERVICO
+  (NUM_ORDEM,
+   DTA_HOR_HISTORICO,
+   IDF_PRIORIZADO,
+   NUM_USER_LOG,
+   COD_SITUACAO_OS,
+   COD_UNIDADE_EXECUTANTE,
+   DSC_ANOTACAO)
+SELECT  os.num_ordem
+       ,SYSDATE
+       ,3
+       ,fc_num_user_banco
+       ,3
+       ,os.cod_unidade_executante
+       ,'CIA'
+ FROM ordem_servico os
+ WHERE 1 = 1
+ AND os.num_ordem_servico = 50630
+ AND os.ano_ordem_servico = 2021;
+  COMMIT;
+END;
+--------------------------------------- 
+ INSERT INTO GENERICO.HISTORICO_ORDEM_SERVICO
+  (NUM_ORDEM,
+   DTA_HOR_HISTORICO,
+   IDF_PRIORIZADO,
+   NUM_USER_LOG,
+   COD_SITUACAO_OS,
+   COD_UNIDADE_EXECUTANTE,
+   DSC_ANOTACAO)
+SELECT  os.num_ordem
+       ,SYSDATE
+       ,3
+       ,fc_num_user_banco
+       ,3
+       ,os.cod_unidade_executante
+       ,'CIA'
+ FROM ordem_servico os
+ WHERE 1 = 1
  AND os.dta_criacao_os >= SYSDATE - 15
  --UE
  --AND os.cod_unidade_executante in (15, 16, 17, 19, 20, 23, 24, 51, 52, 79, 132, 128, 135, 136, 183, 184, 185, 186, 140, 193, 139) 

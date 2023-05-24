@@ -1,0 +1,7 @@
+/**=============================CONSIGNADO==================================*/
+
+SELECT *
+ FROM solicitacao_insumo s
+ WHERE 1 = 1
+ AND s.cod_paciente = '1561454B'
+ AND EXTRACT(YEAR FROM s.dta_hor_cadastro) = 2023;
