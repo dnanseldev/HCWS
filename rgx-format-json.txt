@@ -1,0 +1,14 @@
+/*Find CC*/
+(?<=cc_)\w{9}
+
+/*Final*/
+--Step01
+([{][\t]*[\s]*"id":[\s]*)(\d{1,4})(,[\t]*[\s]*"message":[\s]*"Item adicionado com sucesso:[\s]*)(CC_\w{9})([\s]*[A-Z]+[\w\s-]*"[\n\s]*[}][,]?)
+INSERT INTO generico.centro_custo_integracao\(cod_cencusto, dsc_glpi_group_id\) VALUES\('\4',\2\);
+
+--Step02
+
+Find "CC_"
+Replace it for ""
+
+/*------------------*/

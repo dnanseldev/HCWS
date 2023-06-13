@@ -1,0 +1,33 @@
+ /*=======================================*/
+    SELECT DISTINCT U.NUM_USER_BANCO, 
+                U.NOM_USUARIO, 
+                U.SBN_USUARIO, 
+                USU_CPL.DSC_EMAIL EMAIL 
+  FROM USUARIO_ROLE             UR, 
+       ROLE                     R, 
+       USUARIO                  U, 
+       CENTRO_CUSTO_USUARIO     CC_USU, 
+       REPOSITORIO_CENTRO_CUSTO REPOSIT_CC, 
+       COMPLEMENTO_USUARIO      USU_CPL 
+ WHERE UR.COD_ROLE = R.COD_ROLE 
+   AND UR.NUM_USER_BANCO = U.NUM_USER_BANCO 
+   AND CC_USU.COD_CENCUSTO = REPOSIT_CC.COD_CENCUSTO 
+   AND CC_USU.NUM_USER_BANCO = U.NUM_USER_BANCO 
+   AND USU_CPL.NUM_USER_BANCO = U.NUM_USER_BANCO 
+   AND REPOSIT_CC.SEQ_REPOSITORIO = {0} 
+ AND R.COD_ROLE = 1106; --USUARIO GESTOR
+ 
+ /*=======================================*/
+ --61582 LIGIA APARECIDA DOS SANTOS OUSHIRO
+ SELECT *
+  FROM usuario u
+  WHERE u.nom_usuario LIKE '%LIGIA APARECIDA%';
+  
+ SELECT *
+  FROM REPOSITORIO_CENTRO_CUSTO rcc
+  WHERE 1 = 1
+  AND rcc.num_user_cadastro = 61582;
+  
+ select * from PRESCRICAO.CENTRO_CUSTO t
+where t.cod_cencusto 
+ in ('MATER0034', 'MATER0003', 'MATER0002', 'MATER0004');
